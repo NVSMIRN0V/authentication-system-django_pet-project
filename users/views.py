@@ -1,18 +1,45 @@
-from django.http import HttpRequest, HttpResponse
+from django.views import View
+from django.views.generic import CreateView
+from django.contrib.auth.views import LoginView, LogoutView
+
 from django.shortcuts import render
+from django.urls import reverse_lazy
+
+from users.forms import UserSignInForm, UserSignUpForm
 
 
-def home(request: HttpRequest) -> HttpResponse:
-    return render(request, 'users/index.html', context={'title': 'Главная'})
+class HomeView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'users/index.html', context={'title': 'Главная'})
 
 
-def signin(request: HttpRequest) -> HttpResponse:
-    return render(request, 'users/signin.html', context={'title': 'Войти'})
+class SignInView(LoginView):
+    form_class = UserSignInForm
+    template_name = 'users/signin.html'
+    next_page = 'home'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Войти'
+        return context
 
 
-def signup(request: HttpRequest) -> HttpResponse:
-    return render(request, 'users/signup.html', context={'title': 'Зарегистрироваться'})
+class SignUpView(CreateView):
+    form_class = UserSignUpForm
+    template_name = 'users/signup.html'
+    success_url = reverse_lazy('signin')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Регистрация'
+        return context
 
 
-def signout(request: HttpRequest) -> HttpResponse:
-    return render(request, 'users/signout.html', context={'title': 'Выйти'})
+class SignOutView(LogoutView):
+    template_name = "users/signout.html"
+    next_page = 'home'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Выйти'
+        return context
