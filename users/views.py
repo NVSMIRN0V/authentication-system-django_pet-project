@@ -37,7 +37,7 @@ class SignUpView(CreateView):
 
 class SignOutView(LogoutView):
     template_name = "users/signout.html"
-    next_page = 'home'
+    next_page = 'signout'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

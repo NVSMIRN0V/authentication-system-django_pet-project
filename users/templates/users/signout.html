@@ -8,8 +8,11 @@
 
 <!-- Содержимое страницы -->
 {% block content %}
-    <form method="POST" >
-        {% csrf_token %}
-        <button type="submit">logout</button>
-    </form>
+    <div class="content">
+        <h1 class="text-center">Выход</h1>
+        <p class="text-center">До новых встреч!</p>
+        <div class="btn-group w-100 mt-5">
+            <a href="{% url 'home' %}" class="btn btn-outline-dark btn-lg w-50 mt-5">На главную</a>
+        </div>
+    </div>
 {% endblock %}
